@@ -6,38 +6,73 @@ import Drumie from 'drumie';
 import { useEffect } from "react";
 export default function Home() {
   let drumie
+  const prefix = "ws://norsetreasure.test"
+  const apiPrefix = "http://norsetreasure.test/api"
+  const connectionString = `${prefix}/connect`
+  var connectionToken
+  const getConnectToken = (channel) => {
+    return async () => {
+      try {
+        const res = await fetch(`${apiPrefix}/connect-token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: "1",
+            name: "John Doe",
+            // channels: "customer"
+            // channels: "customer nice"
+            // channels: "*"
+            channels: channel
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch token");
+        }
+
+        const data = await res.json();
+        connectionToken = data.token
+        return data.token;
+      } catch (err) {
+        console.error("Error fetching token:", err);
+        throw err;
+      }
+    }
+  }
+  const getSubscribeToken = (channel) => {
+    return async () => {
+      try {
+        const res = await fetch(`${apiPrefix}/subscribe-token`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: connectionToken,
+            channel: channel
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch token");
+        }
+
+        const data = await res.json();
+        return data.token;
+      } catch (err) {
+        console.error("Error fetching token:", err);
+        throw err;
+      }
+    }
+  }
   useEffect(() => {
-    const prefix= "ws://norsetreasure.test"
-    const apiPrefix = "http://norsetreasure.test/api"
-    const connectionString = `${prefix}/connect`
-    var connectionToken
+
     const channels = [
       {
         name: "customer",
-        token: async () => {
-          try {
-            const res = await fetch(`${apiPrefix}/subscribe-token`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                token: connectionToken,
-                channel: "customer"
-              }),
-            });
-
-            if (!res.ok) {
-              throw new Error("Failed to fetch token");
-            }
-
-            const data = await res.json();
-            return data.token;
-          } catch (err) {
-            console.error("Error fetching token:", err);
-            throw err;
-          }
-        },
+        token: getSubscribeToken("customer"),
         callbacks: {
           subscribing: (ctx) => console.log("subscribing to customer", ctx),
           subscribed: (ctx) => console.log("Subscribed to customer", ctx),
@@ -48,30 +83,8 @@ export default function Home() {
       },
       {
         name: "nice",
-        token: async () => {
-          try {
-            const res = await fetch(`${apiPrefix}/subscribe-token`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                token: connectionToken,
-                channel: "nice"
-              }),
-            });
+        token: getSubscribeToken("nice"),
 
-            if (!res.ok) {
-              throw new Error("Failed to fetch token");
-            }
-
-            const data = await res.json();
-            return data.token;
-          } catch (err) {
-            console.error("Error fetching token:", err);
-            throw err;
-          }
-        },
         callbacks: {
           subscribing: (ctx) => console.log("subscribing to nice", ctx),
           subscribed: (ctx) => console.log("Subscribed to nice", ctx),
@@ -87,35 +100,7 @@ export default function Home() {
       connecting: (ctx) => console.log(`connecting: ${ctx.code}, ${ctx.reason}`),
       connected: (ctx) => console.log(`connected over ${ctx.transport}`),
       disconnected: (ctx) => console.log(`disconnected: ${ctx.code}, ${ctx.reason}`),
-      token: async () => {
-        try {
-          // Security: u should implement your api to call this api
-          const res = await fetch("http://norsetreasure.test/api/connect-token", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              id: "1",
-              name: "John Doe",
-              // channels: "customer" // can access customer channel
-              // channels: "customer nice" // can access customer and nice channel
-              channels: "*" // can access all channel
-            }),
-          });
-
-          if (!res.ok) {
-            throw new Error("Failed to fetch token");
-          }
-
-          const data = await res.json();
-          connectionToken = data.token
-          return data.token;
-        } catch (err) {
-          console.error("Error fetching token:", err);
-          throw err;
-        }
-      },
+      token: getConnectToken("*"),
     }, channels);
 
     drumie.subscribe()
@@ -127,7 +112,7 @@ export default function Home() {
       count++
       customerChannel.publish(`auto publish ${count}`)
       // customerChannel.publish({
-      //     message: "auto publish from client index-mysql-proxy-mode"
+      //     message: "auto publish from client "
       // })
     }, 2000)
 
