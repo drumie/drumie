@@ -1,6 +1,5 @@
 {
   "name": "drumie",
-  
   "version": "1.0.0",
   "main": "src/drumie.js",
   "scripts": {
