@@ -6,8 +6,8 @@ import Drumie from 'drumie';
 import { useEffect } from "react";
 export default function Home() {
   let drumie
-  const prefix = "ws://norsetreasure.test"
-  const apiPrefix = "http://norsetreasure.test/api"
+  const prefix = "wss://***.com"
+  const apiPrefix = "https://***.com/api"
   const connectionString = `${prefix}/connect`
   var connectionToken
   const getConnectToken = (channel) => {
