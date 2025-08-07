@@ -1,0 +1,26 @@
+{
+  "name": "drumie",
+  "version": "1.1.5",
+  "main": "src/drumie.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drumie/drumie.git"
+  },
+  "keywords": [
+    "drumie",
+    "websocket",
+    "websocket-service",
+    "real-time",
+    "ws",
+    "pub/sub",
+    "ably",
+    "pusher"
+  ],
+  "author": "drumie",
+  "license": "MIT",
+  "description": "JavaScript Client SDK enabling bidirectional communication with Drumie, supporting integration in web and React Native environments.",
+  "homepage": "https://github.com/drumie/drumie"
+}
