@@ -311,7 +311,7 @@ curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "admin*"
 
 **History: Retrieve message history of a channel**
 
-Each message returned includes an offset, which indicates its position in the channel’s message history, and an epoch, a unique identifier used for retrieving messages from a specific point in time (e.g., for pagination or syncing purposes).
+Each message returned includes an `offset`, which indicates its position in the channel’s message history, and an `epoch`, a unique identifier used for retrieving messages from a specific point in time (e.g., for pagination or syncing purposes). You can also use the `reverse` option to retrieve messages in reverse chronological order (from newest to oldest).
 
 ```bash
 curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "channel_name", "limit": 1}' https://***.com/api/websocket/history
