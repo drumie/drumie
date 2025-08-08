@@ -24,6 +24,12 @@ In browser, you can import SDK from CDN:
 <script src="https://unpkg.com/drumie@latest/dist/drumie.js"></script>
 ```
 
+Or
+
+```html
+<script src="https://cdn.jsdelivr.net/gh/drumie/drumie@master/dist/drumie.js"></script>
+```
+
 And then in your project:
 
 ```javascript
