@@ -4,6 +4,19 @@
 
 SDK for real-time WebSocket communication with Drumie in the browser.
 
+## Understand the Integration Flow
+
+Client  
+→ Fetch connection token  
+   (Include `channels` field: a list of channels the user is allowed to subscribe to)  
+
+→ Open WebSocket connection  
+
+→ Fetch subscribe token  
+   (Subscription is only allowed if the requested channel is included in the original `channels` list)  
+
+→ Subscribe to channel(s)
+
 ## Install
 
 SDK can be installed via `npm`:
