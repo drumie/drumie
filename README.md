@@ -258,7 +258,7 @@ channel.unsubscribe() // Leave specific channel
 drumie.disconnect() // Disconnect from WebSocket
 ```
 
-## Security Considerations
+## Security
 
 - Ensure that your backend securely calls https://***.com/api/connect-token to obtain a connection token, instead of exposing this logic directly in the client.
 
