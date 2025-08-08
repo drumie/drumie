@@ -231,7 +231,7 @@ const channel = drumie.getChannel("channel")
 // Simple message
 channel.publish(`publish`)
 
-// Object message (commented example)
+// Object message
 channel.publish({
     message: `publish`
 })
