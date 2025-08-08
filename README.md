@@ -137,7 +137,7 @@ The application supports multiple channels with individual token authentication:
 {
   name: "channel",
   token: async () => {
-    // Token fetching logic
+    // Fetch subscribe token
   },
   callbacks: {
     subscribing: (ctx) => console.log("subscribing", ctx),
@@ -204,7 +204,7 @@ const channel = drumie.getChannel("channel")
 {
   name: "channel",
   token: async () => {
-    // Token fetching logic
+    // Fetch subscribe token
   },
   // Receive messages from a specific channel.
   callbacks: {
@@ -266,7 +266,7 @@ useEffect(() => {
 
 ## API:
 
-**Publish:**
+**Publish: Send a message to all users in a channel**
 
 ```bash
 curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "channel_name", "data": "hello"}' https://***.com/api/websocket/publish
@@ -276,13 +276,13 @@ curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "channel
 curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "channel_name", "data": {"text": "hello"}}' https://***.com/api/websocket/publish
 ```
 
-**Presence:**
+**Presence: Get the list of users currently connected in a channel**
 
 ```bash
 curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "channel_name"}' https://***.com/api/websocket/presence
 ```
 
-**Channel stats:**
+**Channel stats: Get the number of users connected in one or more channels**
 
 ```bash
 curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "*"}' https://***.com/api/websocket/channels
@@ -296,7 +296,9 @@ curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "admin"}
 curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "admin*"}' https://***.com/api/websocket/channels
 ```
 
-**History:**
+**History: Retrieve message history of a channel**
+
+Each message returned includes an offset, which indicates its position in the channel’s message history, and an epoch, a unique identifier used for retrieving messages from a specific point in time (e.g., for pagination or syncing purposes).
 
 ```bash
 curl --header "X-API-Key: <API_KEY>" --request POST --data '{"channel": "channel_name", "limit": 1}' https://***.com/api/websocket/history
