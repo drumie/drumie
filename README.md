@@ -1,5 +1,7 @@
 # Drumie WebSocket Implementation Guide
 
+[![Buy service](https://img.shields.io/badge/Buy%20service-8A2BE2)](https://drumie.com/pricing)
+
 ## Overview
 
 SDK for real-time WebSocket communication with Drumie in the browser.
