@@ -10,10 +10,10 @@ export default function Home() {
   const apiPrefix = "https://***.com/api"
   const connectionString = `${prefix}/connect`
   var connectionToken
-  const getConnectToken = (channel) => {
+  const getConnectionToken = (channel) => {
     return async () => {
       try {
-        const res = await fetch(`${apiPrefix}/connect-token`, {
+        const res = await fetch(`${apiPrefix}/auth/connection-token`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -41,10 +41,10 @@ export default function Home() {
       }
     }
   }
-  const getSubscribeToken = (channel) => {
+  const getSubscriptionToken = (channel) => {
     return async () => {
       try {
-        const res = await fetch(`${apiPrefix}/subscribe-token`, {
+        const res = await fetch(`${apiPrefix}/auth/subscription-token`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export default function Home() {
     const channels = [
       {
         name: "customer",
-        token: getSubscribeToken("customer"),
+        token: getSubscriptionToken("customer"),
         callbacks: {
           subscribing: (ctx) => console.log("subscribing to customer", ctx),
           subscribed: (ctx) => console.log("Subscribed to customer", ctx),
@@ -83,7 +83,7 @@ export default function Home() {
       },
       {
         name: "nice",
-        token: getSubscribeToken("nice"),
+        token: getSubscriptionToken("nice"),
 
         callbacks: {
           subscribing: (ctx) => console.log("subscribing to nice", ctx),
@@ -100,7 +100,7 @@ export default function Home() {
       connecting: (ctx) => console.log(`connecting: ${ctx.code}, ${ctx.reason}`),
       connected: (ctx) => console.log(`connected over ${ctx.transport}`),
       disconnected: (ctx) => console.log(`disconnected: ${ctx.code}, ${ctx.reason}`),
-      token: getConnectToken("*"),
+      token: getConnectionToken("*"),
     }, channels);
 
     drumie.subscribe()

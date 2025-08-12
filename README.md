@@ -63,10 +63,10 @@ const apiPrefix = "https://***.com/api"
 const connectionString = `${prefix}/connect`
 let connectionToken
 let drumie
-const getConnectToken = (channel) => {
+const getConnectionToken = (channel) => {
   return async () => {
     try {
-      const res = await fetch(`${apiPrefix}/connect-token`, {
+      const res = await fetch(`${apiPrefix}/auth/connection-token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,10 +92,10 @@ const getConnectToken = (channel) => {
   }
 }
 
-const getSubscribeToken = (channel) => {
+const getSubscriptionToken = (channel) => {
   return async () => {
     try {
-      const res = await fetch(`${apiPrefix}/subscribe-token`, {
+      const res = await fetch(`${apiPrefix}/auth/subscription-token`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -122,7 +122,7 @@ const getSubscribeToken = (channel) => {
 const channels = [
   {
     name: "channel",
-    token: getSubscribeToken("channel"),
+    token: getSubscriptionToken("channel"),
     callbacks: {
       subscribing: (ctx) => console.log("subscribing to channel", ctx),
       subscribed: (ctx) => console.log("Subscribed to channel", ctx),
@@ -137,7 +137,7 @@ drumie = new Drumie(connectionString, {
   connecting: (ctx) => console.log(`connecting: ${ctx.code}, ${ctx.reason}`),
   connected: (ctx) => console.log(`connected over ${ctx.transport}`),
   disconnected: (ctx) => console.log(`disconnected: ${ctx.code}, ${ctx.reason}`),
-  token: getConnectToken("*"),
+  token: getConnectionToken("*"),
 }, channels);
 
 drumie.subscribe()
@@ -169,7 +169,7 @@ The application supports multiple channels with individual token authentication:
 ### Connection Token
 The main connection token is obtained from:
 ```text
-POST https://***.com/api/connect-token
+POST https://***.com/api/auth/connection-token
 ```
 
 **Request Body:**
@@ -193,7 +193,7 @@ POST https://***.com/api/connect-token
 ### Channel Subscription Tokens
 Individual channel tokens are fetched from:
 ```text
-POST https://***.com/api/subscribe-token
+POST https://***.com/api/auth/subscription-token
 ```
 
 **Request Body:**
@@ -262,7 +262,7 @@ drumie.disconnect() // Disconnect from WebSocket
 
 ## Security
 
-- Ensure that your backend securely calls https://***.com/api/connect-token to obtain a connection token, instead of exposing this logic directly in the client.
+- Ensure that your backend securely calls https://***.com/api/auth/connection-token to obtain a connection token, instead of exposing this logic directly in the client.
 
 ## Usage in React Components
 
