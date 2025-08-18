@@ -3,9 +3,11 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Drumie from 'drumie';
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import Link from "next/link";
 export default function Home() {
-  let drumie
+  const drumieRef = useRef(null);
+  let interval
   const prefix = "wss://***.com"
   const apiPrefix = "https://***.com/api"
   const connectionString = `${prefix}/connect`
@@ -96,19 +98,21 @@ export default function Home() {
     ]
 
 
-    drumie = new Drumie(connectionString, {
+    drumieRef.current = new Drumie(connectionString, {
       connecting: (ctx) => console.log(`connecting: ${ctx.code}, ${ctx.reason}`),
       connected: (ctx) => console.log(`connected over ${ctx.transport}`),
       disconnected: (ctx) => console.log(`disconnected: ${ctx.code}, ${ctx.reason}`),
       token: getConnectionToken("*"),
     }, channels);
 
+    const drumie = drumieRef.current
+
     drumie.subscribe()
     const customerChannel = drumie.getChannel("customer")
     // drumie.removeChannel(drumie.getChannel("nice")) // leave a channel
     console.log(drumie.channels())
     let count = 0
-    let interval = setInterval(() => {
+    interval = setInterval(() => {
       count++
       customerChannel.publish(`auto publish ${count}`)
       // customerChannel.publish({
@@ -119,13 +123,18 @@ export default function Home() {
     return () => {
       customerChannel.unsubscribe() // leave a channel
       drumie.disconnect()
+      clearInterval(interval)
     }
   }, [])
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        Set up ws
+        <Link href="/other-page">
+          <button className="bg-blue-600 hover:bg-blue-700 text-lg px-8 py-3 cursor-pointer">
+            Leave
+          </button>
+        </Link>
       </main>
     </div>
   );

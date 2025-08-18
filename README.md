@@ -62,7 +62,7 @@ const prefix = "wss://***.com"
 const apiPrefix = "https://***.com/api"
 const connectionString = `${prefix}/connect`
 let connectionToken
-let drumie
+const drumieRef = useRef(null);
 const getConnectionToken = (channel) => {
   return async () => {
     try {
@@ -133,12 +133,14 @@ const channels = [
   },
 ]
 
-drumie = new Drumie(connectionString, {
+drumiedrumieRef.current = new Drumie(connectionString, {
   connecting: (ctx) => console.log(`connecting: ${ctx.code}, ${ctx.reason}`),
   connected: (ctx) => console.log(`connected over ${ctx.transport}`),
   disconnected: (ctx) => console.log(`disconnected: ${ctx.code}, ${ctx.reason}`),
   token: getConnectionToken("*"),
 }, channels);
+
+const drumie = drumieRef.current
 
 drumie.subscribe()
 ```
